@@ -51,5 +51,5 @@ def createValidAccount(account_first_name_entry, account_last_name_entry, accoun
         accountMainMenu()
 
 
-MonCompte = CheckingAccount("Thomas", "Berta", 1000)
-MonCompte2 = CheckingAccount("Alex", "Tom", 1500)
+# MonCompte = CheckingAccount("Thomas", "Berta", 1000)
+# MonCompte2 = CheckingAccount("Alex", "Tom", 1500)

@@ -1,6 +1,6 @@
 import json
 import tkinter
-from tkinter.messagebox import showerror, showinfo
+from tkinter.messagebox import showerror
 
 from myBank.model.Account import Account
 from myBank.repository.dataBase import bdd
@@ -39,14 +39,15 @@ class CheckingAccount(Account):
         if firstName == "" or lastName == "" or balance == "":
             tkinter.messagebox.showerror("Champs non complets",
                                          "Les champs ne sont pas complets")
-        elif len(firstName) <= 2 or len(firstName) >= 19 or len(lastName) <= 2 or len(lastName) >= 19 or firstName.isdigit() or lastName.isdigit():
-            tkinter.messagebox.showerror("Erreur saisie",
+        elif len(firstName) <= 2 or len(firstName) >= 19 or len(lastName) <= 2 or len(
+                lastName) >= 19 or firstName.isdigit() or lastName.isdigit():
+            tkinter.messagebox.showerror("Erreur de saisie",
                                          "Entrez un prénom et un nom entre 3 et 20 caractères")
 
-        elif len(balance) == 0:
-            tkinter.messagebox.showerror("Erreur saisie", "Vous ne pouvez pas créer un compte à 0 €")
+        elif len(balance) == 0 or balance == 0:
+            tkinter.messagebox.showerror("Erreur de saisie", "Vous ne pouvez pas créer un compte à 0 €")
         elif not balance.isdigit():
-            tkinter.messagebox.showerror("Erreur saisie",
+            tkinter.messagebox.showerror("Erreur de saisie",
                                          "Le solde doit-être en caractères alphanumériques")
         else:
             try:
@@ -55,27 +56,8 @@ class CheckingAccount(Account):
                 bdd.commit()
             finally:
                 tkinter.messagebox.showinfo("Compte créé",
-                                            "Vous pouvez retourner à l'accueil")
+                                            "Vous allez retourner à l'accueil")
                 return True
-
-    # @staticmethod
-    # def createAccount():
-    #     lastName: str = input("Veuillez rentrez le nom : ")
-    #     while not lastName.isalpha():
-    #         print(f"Veuillez ne rentrer que des lettres pour le Nom du compte !\n{CheckingAccount.separator}")
-    #         lastName: str = input("Veuillez rentrez le nom : ")
-    #     firstName: str = input("Veuillez rentrez le prénom : ")
-    #     while not firstName.isalpha():
-    #         print(f"Veuillez ne rentrer que des lettres pour le Prenom du compte !\n{CheckingAccount.separator}")
-    #         firstName: str = input("Veuillez rentrez le nom : ")
-    #     balance = "0"
-    #     balance = input(f"Veuillez rentrez le solde du compte de {lastName} {firstName} : ")
-    #     while not balance.isdigit():
-    #         print(f"Veuillez ne rentrer que des chiffres pour le solde du compte !\n{CheckingAccount.separator}")
-    #         balance = input(f"Veuillez rentrez le solde du compte de {lastName} {firstName} : ")
-    #     print(
-    #         f"{CheckingAccount.separator}\nLe compte courant de {lastName} {firstName} a été créé avec un solde de {balance} €")
-    #     return CheckingAccount(lastName, firstName, int(balance))
 
     @staticmethod
     def deleteAccount(idAccount: int):
@@ -114,7 +96,8 @@ class CheckingAccount(Account):
         amount = -int(amount) if pullout else int(amount)
         if not CheckingAccount.checkAccountId(targetAccountId):
             print(
-                f"{CheckingAccount.separator}Le compte {action1} lequel vous essayer d'effectuer ce {action2} n'existe pas")
+                f"{CheckingAccount.separator}Le compte {action1} lequel vous essayer d'effectuer ce {action2}"
+                f" n'existe pas")
             pass
         else:
             target = CheckingAccount.checkAccountId(int(targetAccountId))
@@ -123,14 +106,16 @@ class CheckingAccount(Account):
                 target.set_balance((target.get_balance() + amount))
                 if target.get_balance() < 0:
                     print(
-                        f"\nLe compte de {target.get_lastName()} {target.get_firstName()} n'a pas les fonds suffisants, le compte "
+                        f"\nLe compte de {target.get_lastName()} {target.get_firstName()} n'a pas les fonds "
+                        f"suffisants, le compte "
                         f"va être à découvert de {target.get_balance()} €")
                 print(
                     f"{CheckingAccount.separator}\nVous avez effectué un {action} de {amount} € sur le compte de"
                     f"{target.get_lastName()} {target.get_firstName()}")
             else:
                 print(
-                    f"{CheckingAccount.separator}\nLe compte de {target.get_lastName()} {target.get_firstName()} est débiteur de {target.get_balance()} €, vous ne pouvez pas faire de {action}")
+                    f"{CheckingAccount.separator}\nLe compte de {target.get_lastName()} {target.get_firstName()} est "
+                    f"débiteur de {target.get_balance()} €, vous ne pouvez pas faire de {action}")
 
     @staticmethod
     def transfert():
@@ -170,7 +155,8 @@ class CheckingAccount(Account):
             print("Il n'y a pas de compte créé")
         else:
             for account in CheckingAccount.accounts:
-                result += f"id: {account.get_id()}\nlastName: {account.get_lastName()}\nfirstName: {account.get_firstName()}\nbalance: {account.get_balance()} €\n{CheckingAccount.separator} \n"
+                result += f"id: {account.get_id()}\nlastName: {account.get_lastName()}\nfirstName: " \
+                          f"{account.get_firstName()}\nbalance: {account.get_balance()} €\n{CheckingAccount.separator} \n "
             print(result)
 
     @staticmethod

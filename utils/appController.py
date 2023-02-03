@@ -3,7 +3,7 @@ from myBank.Controller import UserController
 from myBank.Controller.AccountController import createValidAccount
 from myBank.Controller.UserController import createValidUser
 from myBank.model.CheckingAccount import CheckingAccount
-from myBank.repository.dataBase_util import selectAllUsers, selectAllAccounts, delAccountDB
+from myBank.repository.dataBase_util import selectAllUsers, selectAllAccounts
 from utils.utils import two_funcs
 
 
@@ -373,7 +373,7 @@ def view_all_accounts():
             account_frame = Frame(accounts_frame, bg='#1D4291')
 
             account_info_label = Label(master=account_frame,
-                                       text=accountId + " " + accountLastName + " " + accountFirstName + " " + str(
+                                       text=accountId + " -> " + accountLastName + " " + accountFirstName + " -- " + str(
                                            accountBalance) + " €",
                                        background='#1D4291', foreground='white',
                                        font=('Courrier', 15))
