@@ -1,4 +1,5 @@
 import tkinter
+from tkinter import messagebox
 from myBank.model.User import User
 from myBank.repository.dataBase_util import selectByUserNameAndPwd
 
@@ -25,7 +26,7 @@ def createValidUser(user_name_entry, user_pwd_entry):
 
 
 def userConnect(userName: str, userPwd: str):
-    if not selectByUserNameAndPwd(userName, userPwd).fetchall():
+    if not selectByUserNameAndPwd(userName.lower(), userPwd).fetchall():
         tkinter.messagebox.showerror("Erreur de connexion", "Identifiant ou mot de passe incorrect")
         from utils.appController import user_connection
         user_connection()

@@ -52,7 +52,7 @@ class User:
                                          "Ce nom d'utilisateur existe déjà, veuillez entrez un autre nom d'utilisateur")
         else:
             try:
-                addUserDB(userName, userPwd)
+                addUserDB(userName.lower(), userPwd)
                 bdd.commit()
             finally:
                 tkinter.messagebox.showinfo("Utilisateur créé",
