@@ -7,7 +7,8 @@ def createDB():
         "CREATE TABLE IF NOT EXISTS users ("
         " id INTEGER PRIMARY KEY AUTOINCREMENT,"
         " username TEXT NOT NULL,"
-        " userPwd TEXT NOT NULL)")
+        " userPwd TEXT NOT NULL)"
+    )
     con.execute(
         "CREATE TABLE IF NOT EXISTS accounts ("
         " id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -30,7 +31,10 @@ def addAccountDB(lastName: str, firstName: str, balance: int):
     values = [(lastName, firstName, balance)]
     for value in values:
         con = bdd.cursor()
-        con.execute("INSERT INTO accounts (lastName, firstName, balance) VALUES (?, ?, ?)", value)
+        con.execute(
+            "INSERT INTO accounts (lastName, firstName, balance) VALUES (?, ?, ?)",
+            value,
+        )
         con.close()
 
 
@@ -83,6 +87,8 @@ def selectByUserId(*userId: int):
 
 def selectByUserNameAndPwd(userName: str, userPwd: str):
     con = bdd.cursor()
-    user = con.execute("SELECT * FROM users WHERE username= ? AND userPwd = ?", (userName, userPwd))
+    user = con.execute(
+        "SELECT * FROM users WHERE username= ? AND userPwd = ?", (userName, userPwd)
+    )
     if user:
         return user

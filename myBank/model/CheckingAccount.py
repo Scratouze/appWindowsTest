@@ -4,11 +4,15 @@ from tkinter.messagebox import showerror
 
 from myBank.model.Account import Account
 from myBank.repository.dataBase import bdd
-from myBank.repository.dataBase_util import selectAllAccounts, selectByAccountId, delAccountDB, addAccountDB
+from myBank.repository.dataBase_util import (
+    selectAllAccounts,
+    selectByAccountId,
+    delAccountDB,
+    addAccountDB,
+)
 
 
 class CheckingAccount(Account):
-
     def __init__(self, lastName: str, firstName: str, balance: int):
         assert balance > 0, "Le solde d'un nouveau compte doit être positif"
         super().__init__(lastName, firstName, balance)
@@ -37,26 +41,39 @@ class CheckingAccount(Account):
     @staticmethod
     def createAccount(firstName: str, lastName: str, balance: str):
         if firstName == "" or lastName == "" or balance == "":
-            tkinter.messagebox.showerror("Champs non complets",
-                                         "Les champs ne sont pas complets")
-        elif len(firstName) <= 2 or len(firstName) >= 19 or len(lastName) <= 2 or len(
-                lastName) >= 19 or firstName.isdigit() or lastName.isdigit():
-            tkinter.messagebox.showerror("Erreur de saisie",
-                                         "Entrez un prénom et un nom entre 3 et 20 caractères")
+            tkinter.messagebox.showerror(
+                "Champs non complets", "Les champs ne sont pas complets"
+            )
+        elif (
+            len(firstName) <= 2
+            or len(firstName) >= 19
+            or len(lastName) <= 2
+            or len(lastName) >= 19
+            or firstName.isdigit()
+            or lastName.isdigit()
+        ):
+            tkinter.messagebox.showerror(
+                "Erreur de saisie",
+                "Entrez un prénom et un nom entre 3 et 20 caractères",
+            )
 
         elif len(balance) == 0 or balance == 0:
-            tkinter.messagebox.showerror("Erreur de saisie", "Vous ne pouvez pas créer un compte à 0 €")
+            tkinter.messagebox.showerror(
+                "Erreur de saisie", "Vous ne pouvez pas créer un compte à 0 €"
+            )
         elif not balance.isdigit():
-            tkinter.messagebox.showerror("Erreur de saisie",
-                                         "Le solde doit-être en caractères alphanumériques")
+            tkinter.messagebox.showerror(
+                "Erreur de saisie", "Le solde doit-être en caractères alphanumériques"
+            )
         else:
             try:
                 balance = int(balance)
                 addAccountDB(firstName, lastName, balance)
                 bdd.commit()
             finally:
-                tkinter.messagebox.showinfo("Compte créé",
-                                            "Vous allez retourner à l'accueil")
+                tkinter.messagebox.showinfo(
+                    "Compte créé", "Vous allez retourner à l'accueil"
+                )
                 return True
 
     @staticmethod
@@ -73,9 +90,14 @@ class CheckingAccount(Account):
                         delAccountDB(idAccount)
                         bdd.commit()
                     finally:
-                        tkinter.messagebox.showinfo("Compte Id " + str(idAccount),
-                                                    "Le compte de " + accountFirstName + accountLastName + "a été "
-                                                                                                           "supprimé")
+                        tkinter.messagebox.showinfo(
+                            "Compte Id " + str(idAccount),
+                            "Le compte de "
+                            + accountFirstName
+                            + accountLastName
+                            + "a été "
+                            "supprimé",
+                        )
                         pass
 
     @staticmethod
@@ -91,13 +113,18 @@ class CheckingAccount(Account):
         action1 = "vers" if not pullout else "depuis"
         action2 = "versement" if not pullout else "prélèvement"
         if not targetAccountId and not amount:
-            targetAccountId: int = int(input(f"{action1} quel compte souhaitez vous effectuer un {action2} (id): "))
+            targetAccountId: int = int(
+                input(
+                    f"{action1} quel compte souhaitez vous effectuer un {action2} (id): "
+                )
+            )
             amount = input(f"De quel montant est votre {action2} : ")
         amount = -int(amount) if pullout else int(amount)
         if not CheckingAccount.checkAccountId(targetAccountId):
             print(
                 f"{CheckingAccount.separator}Le compte {action1} lequel vous essayer d'effectuer ce {action2}"
-                f" n'existe pas")
+                f" n'existe pas"
+            )
             pass
         else:
             target = CheckingAccount.checkAccountId(int(targetAccountId))
@@ -108,27 +135,40 @@ class CheckingAccount(Account):
                     print(
                         f"\nLe compte de {target.get_lastName()} {target.get_firstName()} n'a pas les fonds "
                         f"suffisants, le compte "
-                        f"va être à découvert de {target.get_balance()} €")
+                        f"va être à découvert de {target.get_balance()} €"
+                    )
                 print(
                     f"{CheckingAccount.separator}\nVous avez effectué un {action} de {amount} € sur le compte de"
-                    f"{target.get_lastName()} {target.get_firstName()}")
+                    f"{target.get_lastName()} {target.get_firstName()}"
+                )
             else:
                 print(
                     f"{CheckingAccount.separator}\nLe compte de {target.get_lastName()} {target.get_firstName()} est "
-                    f"débiteur de {target.get_balance()} €, vous ne pouvez pas faire de {action}")
+                    f"débiteur de {target.get_balance()} €, vous ne pouvez pas faire de {action}"
+                )
 
     @staticmethod
     def transfert():
-        originAccountId: int = int(input("Depuis quel compte souhaitez vous effectuer un virement (id): "))
+        originAccountId: int = int(
+            input("Depuis quel compte souhaitez vous effectuer un virement (id): ")
+        )
         originAccount: CheckingAccount = CheckingAccount.checkAccountId(originAccountId)
         if not originAccount:
-            print(f"Le compte depuis lequel vous essayer d'effectuer ce virement n'existe pas")
+            print(
+                f"Le compte depuis lequel vous essayer d'effectuer ce virement n'existe pas"
+            )
             pass
         else:
-            targetAccountId: int = int(input("Vers quel compte souhaitez vous effectuer un virement (id): "))
-            targetAccount: CheckingAccount = CheckingAccount.checkAccountId(targetAccountId)
+            targetAccountId: int = int(
+                input("Vers quel compte souhaitez vous effectuer un virement (id): ")
+            )
+            targetAccount: CheckingAccount = CheckingAccount.checkAccountId(
+                targetAccountId
+            )
             if not targetAccount:
-                print(f"Le compte vers lequel vous essayer d'effectuer ce virement n'existe pas")
+                print(
+                    f"Le compte vers lequel vous essayer d'effectuer ce virement n'existe pas"
+                )
                 pass
             else:
                 amount = int(input("De quel montant est votre virement : "))
@@ -139,9 +179,12 @@ class CheckingAccount(Account):
     def viewAllJsonAccounts() -> json:
         jsonResult = []
         for account in CheckingAccount.accounts:
-            accountDict = {'id': account.get_id(), 'lastName': account.get_lastName(),
-                           'firstName': account.get_firstName(),
-                           'balance': account.get_balance()}
+            accountDict = {
+                "id": account.get_id(),
+                "lastName": account.get_lastName(),
+                "firstName": account.get_firstName(),
+                "balance": account.get_balance(),
+            }
             jsonAccount = json.dumps(accountDict)
             jsonResult.append(jsonAccount)
         print(CheckingAccount.separator)
@@ -155,8 +198,10 @@ class CheckingAccount(Account):
             print("Il n'y a pas de compte créé")
         else:
             for account in CheckingAccount.accounts:
-                result += f"id: {account.get_id()}\nlastName: {account.get_lastName()}\nfirstName: " \
-                          f"{account.get_firstName()}\nbalance: {account.get_balance()} €\n{CheckingAccount.separator} \n "
+                result += (
+                    f"id: {account.get_id()}\nlastName: {account.get_lastName()}\nfirstName: "
+                    f"{account.get_firstName()}\nbalance: {account.get_balance()} €\n{CheckingAccount.separator} \n "
+                )
             print(result)
 
     @staticmethod

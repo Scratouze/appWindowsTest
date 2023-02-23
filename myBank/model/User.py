@@ -2,7 +2,14 @@ import itertools
 import tkinter
 from tkinter.messagebox import showwarning
 from myBank.repository.dataBase import bdd
-from myBank.repository.dataBase_util import addUserDB, selectAllUsers, selectByUserName, delUserDB, selectByUserId
+from myBank.repository.dataBase_util import (
+    addUserDB,
+    selectAllUsers,
+    selectByUserName,
+    delUserDB,
+    selectByUserId,
+)
+
 
 class User:
     _idCounter = itertools.count()
@@ -30,33 +37,44 @@ class User:
     @staticmethod
     def createUser(userName: str, userPwd: str):
         from myBank.Controller.UserController import password_check
+
         if userName == "" or userPwd == "":
-            tkinter.messagebox.showerror("Champs non complets",
-                                         "Les champs ne sont pas complets")
+            tkinter.messagebox.showerror(
+                "Champs non complets", "Les champs ne sont pas complets"
+            )
         elif len(userName) <= 2 or len(userName) >= 19 or userName.isdigit():
-            tkinter.messagebox.showerror("Erreur utilisateur",
-                                         "Entrez un nom d'utilisateur entre 3 et 20 caractères contenant au moins 1 "
-                                         "lettre")
+            tkinter.messagebox.showerror(
+                "Erreur utilisateur",
+                "Entrez un nom d'utilisateur entre 3 et 20 caractères contenant au moins 1 "
+                "lettre",
+            )
 
         elif len(userPwd) == 0:
-            tkinter.messagebox.showerror("Erreur mot de passe", "Veuillez entrer un mot de passe")
+            tkinter.messagebox.showerror(
+                "Erreur mot de passe", "Veuillez entrer un mot de passe"
+            )
 
         elif not password_check(userPwd):
-            tkinter.messagebox.showerror("Erreur mot de passe",
-                                         "Veuillez entrez un mot de passe contenant au moins un chiffre, une lettre "
-                                         "minuscule "
-                                         ", une lettre majuscule ainsi qu'1 caractère spécial (\'$@#%+-*!?\')")
+            tkinter.messagebox.showerror(
+                "Erreur mot de passe",
+                "Veuillez entrez un mot de passe contenant au moins un chiffre, une lettre "
+                "minuscule "
+                ", une lettre majuscule ainsi qu'1 caractère spécial ('$@#%+-*!?')",
+            )
 
         elif User.checkUserName(userName):
-            tkinter.messagebox.showerror("Doublon utilisateur",
-                                         "Ce nom d'utilisateur existe déjà, veuillez entrez un autre nom d'utilisateur")
+            tkinter.messagebox.showerror(
+                "Doublon utilisateur",
+                "Ce nom d'utilisateur existe déjà, veuillez entrez un autre nom d'utilisateur",
+            )
         else:
             try:
                 addUserDB(userName.lower(), userPwd)
                 bdd.commit()
             finally:
-                tkinter.messagebox.showinfo("Utilisateur créé",
-                                            "Vous pouvez retourner l'accueil")
+                tkinter.messagebox.showinfo(
+                    "Utilisateur créé", "Vous pouvez retourner l'accueil"
+                )
                 return True
 
     @staticmethod
@@ -72,8 +90,10 @@ class User:
                         delUserDB(idUser)
                         bdd.commit()
                     finally:
-                        tkinter.messagebox.showinfo("Utilisateur " + userName,
-                                                    "Utilisateur " + userName + " supprimé")
+                        tkinter.messagebox.showinfo(
+                            "Utilisateur " + userName,
+                            "Utilisateur " + userName + " supprimé",
+                        )
                         pass
 
     @staticmethod
@@ -107,4 +127,4 @@ class User:
 
 
 def __str__(self) -> str:
-    return f'id: {self.get_id()} \nlastName: {self.get_userName()} \nfirstName: {self.get_pwd()}'
+    return f"id: {self.get_id()} \nlastName: {self.get_userName()} \nfirstName: {self.get_pwd()}"

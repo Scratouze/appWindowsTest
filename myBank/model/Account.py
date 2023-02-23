@@ -64,4 +64,4 @@ class Account(object):
         pass
 
     def __str__(self) -> str:
-        return f'id: {self.get_id()} \nlastName: {self.get_lastName()} \nfirstName: {self.get_firstName()} \nbalance: {self.get_balance()} \n'
+        return f"id: {self.get_id()} \nlastName: {self.get_lastName()} \nfirstName: {self.get_firstName()} \nbalance: {self.get_balance()} \n"
